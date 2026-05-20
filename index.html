@@ -1,0 +1,1082 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HeadStart — Your inbox, briefed.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,700;1,9..144,400;1,9..144,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    /* ─── CSS Variables ─────────────────────────────────── */
+    :root {
+      --deep-navy:   #1C1B2E;
+      --mid-navy:    #2B2A45;
+      --teal:        #1A9E7A;
+      --teal-dim:    #13705580;
+      --teal-tint:   #1A9E7A18;
+      --white:       #FFFFFF;
+      --off-white:   #F5F4F0;
+      --slate:       #6B6A82;
+      --pebble:      #E0DFF5;
+      --radius:      6px;
+      --max-w:       1080px;
+      --section-gap: 120px;
+    }
+
+    /* ─── Reset & Base ──────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--deep-navy);
+      color: var(--white);
+      font-family: 'Inter', sans-serif;
+      font-size: 17px;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    img { display: block; max-width: 100%; }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* ─── Utility ───────────────────────────────────────── */
+    .container {
+      width: 100%;
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 28px;
+    }
+
+    .teal { color: var(--teal); }
+    .italic { font-style: italic; }
+    .slate { color: var(--slate); }
+
+    /* ─── Scroll-reveal ─────────────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.65s ease, transform 0.65s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+
+    /* ─── Nav ───────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 20px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      backdrop-filter: blur(14px);
+      background: rgba(28, 27, 46, 0.85);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .nav-logo {
+      font-family: 'Fraunces', serif;
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+    }
+    .nav-logo span { color: var(--teal); }
+
+    .nav-cta {
+      background: var(--teal);
+      color: var(--white);
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      padding: 9px 20px;
+      border-radius: var(--radius);
+      border: none;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .nav-cta:hover { opacity: 0.85; }
+
+    /* ─── Hero ──────────────────────────────────────────── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding-top: 88px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* subtle background texture */
+    #hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 70% 40%, rgba(26,158,122,0.10) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 60% at 10% 80%, rgba(43,42,69,0.6) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      position: relative;
+      padding: 80px 0 100px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--teal);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+    .hero-eyebrow::before {
+      content: '';
+      display: inline-block;
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--teal);
+    }
+
+    .hero-headline {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(42px, 5.5vw, 68px);
+      font-weight: 700;
+      line-height: 1.08;
+      letter-spacing: -1.5px;
+      margin-bottom: 24px;
+    }
+
+    .hero-sub {
+      font-size: 18px;
+      color: rgba(255,255,255,0.72);
+      line-height: 1.65;
+      max-width: 480px;
+      margin-bottom: 40px;
+    }
+
+    .hero-form {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .hero-form input[type="email"] {
+      flex: 1 1 220px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: var(--radius);
+      padding: 14px 18px;
+      color: var(--white);
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .hero-form input[type="email"]::placeholder { color: var(--slate); }
+    .hero-form input[type="email"]:focus { border-color: var(--teal); }
+
+    .btn-primary {
+      background: var(--teal);
+      color: var(--white);
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      font-weight: 500;
+      padding: 14px 28px;
+      border-radius: var(--radius);
+      border: none;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.15s;
+      white-space: nowrap;
+    }
+    .btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
+
+    .hero-note {
+      margin-top: 14px;
+      font-size: 13px;
+      color: var(--slate);
+    }
+
+    /* Hero visual — briefing mockup */
+    .hero-visual {
+      position: relative;
+    }
+
+    .mockup-card {
+      background: var(--mid-navy);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px;
+      padding: 28px;
+      position: relative;
+      overflow: hidden;
+    }
+    .mockup-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--teal);
+    }
+
+    .mockup-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 22px;
+    }
+    .mockup-time {
+      font-family: 'Fraunces', serif;
+      font-size: 22px;
+      font-weight: 700;
+    }
+    .mockup-badge {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--teal);
+      background: var(--teal-tint);
+      border: 1px solid rgba(26,158,122,0.3);
+      padding: 4px 10px;
+      border-radius: 100px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .mockup-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 14px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .mockup-row:last-child { border-bottom: none; }
+
+    .mockup-tag {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      padding: 3px 8px;
+      border-radius: 4px;
+      white-space: nowrap;
+      margin-top: 2px;
+    }
+    .tag-action { background: rgba(26,158,122,0.18); color: var(--teal); }
+    .tag-meeting { background: rgba(107,106,130,0.25); color: var(--slate); }
+    .tag-pending { background: rgba(255,180,0,0.12); color: #D4970A; }
+
+    .mockup-text { flex: 1; }
+    .mockup-from {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+    .mockup-subject {
+      font-size: 13px;
+      color: rgba(255,255,255,0.55);
+    }
+
+    .mockup-status {
+      font-size: 11px;
+      color: var(--slate);
+      margin-top: 3px;
+    }
+    .status-dot {
+      display: inline-block;
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      margin-right: 5px;
+      vertical-align: middle;
+    }
+    .dot-pending { background: #D4970A; }
+    .dot-done    { background: var(--teal); }
+
+    /* ─── Divider ───────────────────────────────────────── */
+    .divider {
+      width: 100%;
+      height: 1px;
+      background: rgba(255,255,255,0.07);
+    }
+
+    /* ─── Section Shared ────────────────────────────────── */
+    section {
+      padding: var(--section-gap) 0;
+    }
+
+    .section-label {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 16px;
+    }
+
+    .section-headline {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(32px, 4vw, 52px);
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -1px;
+      margin-bottom: 20px;
+    }
+
+    .section-sub {
+      font-size: 17px;
+      color: rgba(255,255,255,0.65);
+      max-width: 540px;
+      line-height: 1.7;
+    }
+
+    /* ─── Problem Section ───────────────────────────────── */
+    #problem {
+      background: var(--mid-navy);
+    }
+
+    .problem-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: start;
+      margin-top: 60px;
+    }
+
+    .pain-card {
+      position: relative;
+      padding: 32px;
+      background: rgba(28,27,46,0.5);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 10px;
+    }
+    .pain-card::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 20%; bottom: 20%;
+      width: 3px;
+      background: var(--teal);
+      border-radius: 0 2px 2px 0;
+    }
+
+    .pain-number {
+      font-family: 'Fraunces', serif;
+      font-size: 52px;
+      font-weight: 700;
+      color: rgba(26,158,122,0.25);
+      line-height: 1;
+      margin-bottom: 12px;
+    }
+
+    .pain-title {
+      font-family: 'Fraunces', serif;
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .pain-body {
+      font-size: 15px;
+      color: rgba(255,255,255,0.62);
+      line-height: 1.65;
+    }
+
+    /* ─── What HeadStart Does ───────────────────────────── */
+    #what {
+      background: var(--deep-navy);
+    }
+
+    .what-header {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: end;
+      margin-bottom: 72px;
+    }
+
+    .feature-list {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .feature-item {
+      display: grid;
+      grid-template-columns: 56px 1fr;
+      gap: 0;
+      padding: 28px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      align-items: start;
+    }
+    .feature-item:first-child { border-top: 1px solid rgba(255,255,255,0.07); }
+
+    .feature-num {
+      font-family: 'Fraunces', serif;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--teal);
+      padding-top: 3px;
+    }
+
+    .feature-content {}
+    .feature-title {
+      font-family: 'Fraunces', serif;
+      font-size: 19px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .feature-body {
+      font-size: 15px;
+      color: rgba(255,255,255,0.60);
+      line-height: 1.65;
+    }
+
+    .self-heal-callout {
+      margin-top: 48px;
+      padding: 28px 32px;
+      background: var(--teal-tint);
+      border: 1px solid rgba(26,158,122,0.25);
+      border-radius: 10px;
+    }
+    .self-heal-callout p {
+      font-family: 'Fraunces', serif;
+      font-size: 22px;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+    .self-heal-callout span { font-style: italic; }
+
+    /* ─── CTA Section ───────────────────────────────────── */
+    #cta {
+      background: var(--mid-navy);
+      border-top: 1px solid rgba(255,255,255,0.06);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .cta-inner {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 60px;
+      align-items: center;
+    }
+
+    .cta-headline {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(32px, 3.5vw, 46px);
+      font-weight: 700;
+      line-height: 1.12;
+      letter-spacing: -0.8px;
+      margin-bottom: 16px;
+    }
+
+    .cta-sub {
+      font-size: 16px;
+      color: rgba(255,255,255,0.60);
+      max-width: 480px;
+    }
+
+    .cta-form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-width: 300px;
+    }
+
+    .cta-form input[type="email"],
+    .cta-form select {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: var(--radius);
+      padding: 13px 16px;
+      color: var(--white);
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s;
+      width: 100%;
+    }
+    .cta-form input[type="email"]::placeholder { color: var(--slate); }
+    .cta-form input[type="email"]:focus,
+    .cta-form select:focus { border-color: var(--teal); }
+    .cta-form select { appearance: none; cursor: pointer; }
+    .cta-form select option { background: var(--deep-navy); }
+
+    .cta-note {
+      font-size: 12px;
+      color: var(--slate);
+      text-align: center;
+    }
+
+    /* ─── FAQ ───────────────────────────────────────────── */
+    #faq {
+      background: var(--deep-navy);
+    }
+
+    .faq-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3px;
+      margin-top: 56px;
+    }
+
+    .faq-item {
+      padding: 32px;
+      background: var(--mid-navy);
+      border-radius: 4px;
+    }
+
+    .faq-q {
+      font-family: 'Fraunces', serif;
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      line-height: 1.3;
+    }
+
+    .faq-a {
+      font-size: 15px;
+      color: rgba(255,255,255,0.62);
+      line-height: 1.65;
+    }
+
+    /* ─── About ─────────────────────────────────────────── */
+    #about {
+      background: var(--mid-navy);
+    }
+
+    .about-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    .about-body {
+      font-size: 17px;
+      color: rgba(255,255,255,0.68);
+      line-height: 1.75;
+      margin-bottom: 20px;
+    }
+
+    .about-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 32px;
+    }
+
+    .about-logo-mark {
+      width: 40px; height: 40px;
+      background: var(--teal);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 18px;
+    }
+
+    .about-company {
+      font-size: 15px;
+      font-weight: 500;
+    }
+    .about-company small {
+      display: block;
+      font-size: 12px;
+      color: var(--slate);
+      font-weight: 400;
+    }
+
+    /* about side visual */
+    .about-visual {
+      background: var(--deep-navy);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 10px;
+      padding: 40px;
+    }
+
+    .stat-list {
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    .stat-item {}
+    .stat-value {
+      font-family: 'Fraunces', serif;
+      font-size: 48px;
+      font-weight: 700;
+      color: var(--teal);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+    .stat-label {
+      font-size: 14px;
+      color: rgba(255,255,255,0.55);
+    }
+
+    .stat-divider {
+      height: 1px;
+      background: rgba(255,255,255,0.07);
+    }
+
+    /* ─── Footer ────────────────────────────────────────── */
+    footer {
+      background: var(--deep-navy);
+      border-top: 1px solid rgba(255,255,255,0.07);
+      padding: 48px 0;
+    }
+
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .footer-logo {
+      font-family: 'Fraunces', serif;
+      font-size: 18px;
+      font-weight: 700;
+    }
+    .footer-logo span { color: var(--teal); }
+
+    .footer-meta {
+      font-size: 13px;
+      color: var(--slate);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 24px;
+    }
+    .footer-links a {
+      font-size: 13px;
+      color: var(--slate);
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--white); }
+
+    /* ─── Success state ─────────────────────────────────── */
+    .form-success {
+      display: none;
+      align-items: center;
+      gap: 10px;
+      background: var(--teal-tint);
+      border: 1px solid rgba(26,158,122,0.3);
+      border-radius: var(--radius);
+      padding: 14px 20px;
+      font-size: 14px;
+      color: var(--teal);
+    }
+    .form-success.show { display: flex; }
+
+    /* ─── Responsive ────────────────────────────────────── */
+    @media (max-width: 860px) {
+      :root { --section-gap: 72px; }
+
+      .hero-inner,
+      .problem-grid,
+      .what-header,
+      .cta-inner,
+      .about-inner {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-visual { order: -1; }
+
+      .faq-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .what-header { margin-bottom: 40px; }
+
+      .cta-form { min-width: unset; width: 100%; }
+
+      .footer-inner { flex-direction: column; align-items: flex-start; }
+    }
+
+    @media (max-width: 500px) {
+      nav { padding: 16px 20px; }
+      .container { padding: 0 20px; }
+      .hero-form { flex-direction: column; }
+      .hero-form input[type="email"] { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── Nav ─────────────────────────────────────────────── -->
+  <nav>
+    <div class="nav-logo">Head<span>Start</span></div>
+    <button class="nav-cta" onclick="document.getElementById('cta').scrollIntoView({behavior:'smooth'})">
+      Get early access
+    </button>
+  </nav>
+
+  <!-- ── Hero ────────────────────────────────────────────── -->
+  <section id="hero">
+    <div class="container">
+      <div class="hero-inner">
+
+        <div class="hero-copy">
+          <div class="hero-eyebrow reveal">Early access · SMB-Integrator</div>
+          <h1 class="hero-headline reveal reveal-delay-1">
+            Your inbox,<br><em class="italic teal">briefed.</em><br>Every morning.
+          </h1>
+          <p class="hero-sub reveal reveal-delay-2">
+            HeadStart cuts through the noise in your inbox, surfaces only what matters, and ensures you never forget to follow through — anchored by a 06:55 push notification.
+          </p>
+          <form class="hero-form reveal reveal-delay-3" onsubmit="handleSignup(event, 'hero-success')">
+            <input type="email" placeholder="your@work.com" required />
+            <button type="submit" class="btn-primary">Get early access</button>
+          </form>
+          <div class="form-success" id="hero-success">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="8" fill="#1A9E7A" fill-opacity=".2"/><path d="M5 8l2 2 4-4" stroke="#1A9E7A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            You're on the list. We'll be in touch.
+          </div>
+          <p class="hero-note reveal reveal-delay-4">No pricing yet. No obligations. Just early access.</p>
+        </div>
+
+        <!-- Briefing mockup -->
+        <div class="hero-visual reveal reveal-delay-2">
+          <div class="mockup-card">
+            <div class="mockup-header">
+              <div class="mockup-time">06:55 · Morning briefing</div>
+              <div class="mockup-badge">Today</div>
+            </div>
+
+            <div class="mockup-row">
+              <div class="mockup-tag tag-action">Action</div>
+              <div class="mockup-text">
+                <div class="mockup-from">Sarah Chen · Acme Corp</div>
+                <div class="mockup-subject">Proposal review — needs your sign-off</div>
+                <div class="mockup-status">
+                  <span class="status-dot dot-pending"></span>No reply yet
+                </div>
+              </div>
+            </div>
+
+            <div class="mockup-row">
+              <div class="mockup-tag tag-meeting">Meeting</div>
+              <div class="mockup-text">
+                <div class="mockup-from">James · Operations</div>
+                <div class="mockup-subject">Q3 sync — today 2:00 PM</div>
+              </div>
+            </div>
+
+            <div class="mockup-row">
+              <div class="mockup-tag tag-pending">Pending</div>
+              <div class="mockup-text">
+                <div class="mockup-from">Tom Walker · Vendor</div>
+                <div class="mockup-subject">Invoice #2204 — awaiting your reply since Mon</div>
+                <div class="mockup-status">
+                  <span class="status-dot dot-pending"></span>Draft started, not sent
+                </div>
+              </div>
+            </div>
+
+            <div class="mockup-row">
+              <div class="mockup-tag tag-action">Action</div>
+              <div class="mockup-text">
+                <div class="mockup-from">Lisa Park · Legal</div>
+                <div class="mockup-subject">Contract update — please confirm</div>
+                <div class="mockup-status">
+                  <span class="status-dot dot-done"></span>Responded
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ── Problem ──────────────────────────────────────────── -->
+  <section id="problem">
+    <div class="container">
+      <div class="section-label reveal">The problem</div>
+      <h2 class="section-headline reveal reveal-delay-1">
+        Your inbox is costing you<br>more than <em class="italic">just time.</em>
+      </h2>
+      <p class="section-sub reveal reveal-delay-2">
+        Every workday begins with orientation. Every transition back into the inbox repeats it. And somewhere in the middle, something important slips.
+      </p>
+
+      <div class="problem-grid">
+        <div class="pain-card reveal">
+          <div class="pain-number">01</div>
+          <h3 class="pain-title">The stolen hour</h3>
+          <p class="pain-body">
+            Every workday begins with 30–60 minutes of inbox catch-up before any real work begins. That's roughly 12.5% of payroll spent on orientation, not production. And it repeats — after every meeting, post-lunch, end of day.
+          </p>
+        </div>
+        <div class="pain-card reveal reveal-delay-1">
+          <div class="pain-number">02</div>
+          <h3 class="pain-title">The forgotten reply</h3>
+          <p class="pain-body">
+            You started a reply, got distracted, and the draft sat unsent. Or you read an email meaning to come back to it — and didn't. By Thursday you've dropped three things you meant to follow up on. This isn't a time cost. It's a trust cost.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ── What HeadStart Does ──────────────────────────────── -->
+  <section id="what">
+    <div class="container">
+      <div class="what-header">
+        <div>
+          <div class="section-label reveal">What HeadStart does</div>
+          <h2 class="section-headline reveal reveal-delay-1">
+            Five things.<br><em class="italic">Done consistently.</em>
+          </h2>
+        </div>
+        <p class="section-sub reveal reveal-delay-2">
+          HeadStart doesn't draft replies or act on your behalf. It shows you what matters, tracks what you've dropped, and shows up again tomorrow if you were too busy today.
+        </p>
+      </div>
+
+      <div class="feature-list">
+        <div class="feature-item reveal">
+          <div class="feature-num">01</div>
+          <div class="feature-content">
+            <h3 class="feature-title">Surfaces only what matters</h3>
+            <p class="feature-body">Reads your mailbox, filters out commercial noise and no-reply senders, then classifies the rest — action-required, meeting, status update, or FYI. You see only what's worth your attention.</p>
+          </div>
+        </div>
+
+        <div class="feature-item reveal reveal-delay-1">
+          <div class="feature-num">02</div>
+          <div class="feature-content">
+            <h3 class="feature-title">Tracks follow-through <em class="italic">deterministically</em></h3>
+            <p class="feature-body">For each action-required item, HeadStart checks your Sent and Drafts folders via your mail provider's API. It reports the facts: pending, draft started, or responded. No AI guessing — just mailbox truth.</p>
+          </div>
+        </div>
+
+        <div class="feature-item reveal reveal-delay-2">
+          <div class="feature-num">03</div>
+          <div class="feature-content">
+            <h3 class="feature-title">Delivers at 06:55, every morning</h3>
+            <p class="feature-body">A push notification arrives on your phone at 06:55. One tap opens the briefing. The push also functions as a daily reminder the product exists — preventing the silent churn that kills useful tools.</p>
+          </div>
+        </div>
+
+        <div class="feature-item reveal reveal-delay-3">
+          <div class="feature-num">04</div>
+          <div class="feature-content">
+            <h3 class="feature-title">Available on-demand throughout the day</h3>
+            <p class="feature-body">The briefing URL — or PWA on your home screen — generates a fresh delta-since-last-view briefing every time you open it. No scheduled interrupts during the day. Your workday is unpredictable; HeadStart respects that.</p>
+          </div>
+        </div>
+
+        <div class="feature-item reveal reveal-delay-4">
+          <div class="feature-num">05</div>
+          <div class="feature-content">
+            <h3 class="feature-title">Self-heals across days</h3>
+            <p class="feature-body">If you're too busy to engage today, yesterday's unhandled items appear in tomorrow's morning briefing automatically. There's no scenario where things slip because you were too busy.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="self-heal-callout reveal">
+        <p>HeadStart <span>works even on the days you don't.</span></p>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ── CTA ──────────────────────────────────────────────── -->
+  <section id="cta">
+    <div class="container">
+      <div class="cta-inner">
+        <div>
+          <div class="section-label reveal">Early access</div>
+          <h2 class="cta-headline reveal reveal-delay-1">
+            Leave your email.<br>We'll take it from <em class="italic teal">there.</em>
+          </h2>
+          <p class="cta-sub reveal reveal-delay-2">
+            HeadStart is pre-launch. No pricing. No commitments. Drop your email and we'll reach out with early access details when ready.
+          </p>
+        </div>
+
+        <div class="cta-form reveal reveal-delay-2">
+          <input type="email" placeholder="Work email" required />
+          <select>
+            <option value="" disabled selected>Outlook or Gmail? (optional)</option>
+            <option value="outlook">Microsoft 365 / Outlook</option>
+            <option value="gmail">Google Workspace / Gmail</option>
+            <option value="unsure">Not sure yet</option>
+          </select>
+          <button type="button" class="btn-primary" onclick="handleSignup(event, 'cta-success')">Request early access</button>
+          <div class="form-success" id="cta-success">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="8" fill="#1A9E7A" fill-opacity=".2"/><path d="M5 8l2 2 4-4" stroke="#1A9E7A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            You're on the list.
+          </div>
+          <p class="cta-note">No pricing. No urgency. Just early access.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ── FAQ ──────────────────────────────────────────────── -->
+  <section id="faq">
+    <div class="container">
+      <div class="section-label reveal">FAQ</div>
+      <h2 class="section-headline reveal reveal-delay-1">Honest answers.</h2>
+
+      <div class="faq-grid">
+
+        <div class="faq-item reveal">
+          <p class="faq-q">Will HeadStart read all my email?</p>
+          <p class="faq-a">HeadStart reads your inbox to classify and surface what needs your attention. Commercial senders and no-reply addresses are filtered out before classification. It does not store email content beyond what's needed to generate your briefing.</p>
+        </div>
+
+        <div class="faq-item reveal reveal-delay-1">
+          <p class="faq-q">Is my data safe?</p>
+          <p class="faq-a">HeadStart is built so it can run on your infrastructure when you're ready. We're not making broad claims about data sovereignty at this stage — we'll walk you through the specifics when we connect.</p>
+        </div>
+
+        <div class="faq-item reveal reveal-delay-2">
+          <p class="faq-q">What if I miss the morning notification?</p>
+          <p class="faq-a">No problem. Yesterday's unhandled items show up in tomorrow's morning briefing automatically. You can also open the briefing on-demand any time during the day and get a fresh view. The product is forgiving of real workdays.</p>
+        </div>
+
+        <div class="faq-item reveal reveal-delay-3">
+          <p class="faq-q">Does HeadStart work with Outlook and Gmail?</p>
+          <p class="faq-a">Yes — HeadStart is being built for both Microsoft 365 / Outlook and Google Workspace / Gmail. The pain it solves isn't platform-specific, and neither is the solution.</p>
+        </div>
+
+        <div class="faq-item reveal reveal-delay-1">
+          <p class="faq-q">Will it sort or reorganize my inbox?</p>
+          <p class="faq-a">No. HeadStart reads and presents — it does not archive, label, sort, or reorganize anything. Your inbox stays exactly as you left it. HeadStart only changes what you <em>see</em>, not what's there.</p>
+        </div>
+
+        <div class="faq-item reveal reveal-delay-2">
+          <p class="faq-q">How much does it cost?</p>
+          <p class="faq-a">We're not publishing pricing yet — this page's only job is to see if the problem resonates. Pricing is a conversation for after you've raised your hand. Leave your email and we'll get into the details together.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ── About ────────────────────────────────────────────── -->
+  <section id="about">
+    <div class="container">
+      <div class="about-inner">
+        <div>
+          <div class="section-label reveal">About</div>
+          <h2 class="section-headline reveal reveal-delay-1">Built by people who understand <em class="italic">operations.</em></h2>
+          <p class="about-body reveal reveal-delay-2">
+            HeadStart is built by SMB-Integrator — a company that has spent years building Microsoft Dynamics 365 Business Central extensions for small and mid-sized businesses.
+          </p>
+          <p class="about-body reveal reveal-delay-3">
+            We know what it looks like when a business's tools don't match its reality. HeadStart came from watching the same pattern repeat: capable people losing time and trust to an inbox that was never designed to help them stay on top of what matters.
+          </p>
+          <div class="about-brand reveal reveal-delay-4">
+            <div class="about-logo-mark">S</div>
+            <div class="about-company">
+              SMB-Integrator
+              <small>smb-integrator.com</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="about-visual reveal reveal-delay-2">
+          <div class="stat-list">
+            <div class="stat-item">
+              <div class="stat-value">06:55</div>
+              <div class="stat-label">Your briefing arrives. Every morning.</div>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+              <div class="stat-value">~12%</div>
+              <div class="stat-label">Of payroll spent on inbox orientation — before any real work starts.</div>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+              <div class="stat-value">0</div>
+              <div class="stat-label">Changes made to your inbox. HeadStart reads. It doesn't touch.</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Footer ───────────────────────────────────────────── -->
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-logo">Head<span>Start</span></div>
+        <p class="footer-meta">© 2026 SMB-Integrator. Pre-launch — early access only.</p>
+        <div class="footer-links">
+          <a href="https://smb-integrator.com" target="_blank" rel="noopener">SMB-Integrator</a>
+          <!-- TODO: Add privacy policy and terms links when available -->
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ── JS: scroll reveal + form ────────────────────────── -->
+  <script>
+    // Scroll reveal
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // Make hero elements visible immediately
+    document.querySelectorAll('#hero .reveal').forEach(el => {
+      setTimeout(() => el.classList.add('visible'), 100);
+    });
+
+    // Form submission handler (placeholder — wire to your backend/Formspree)
+    function handleSignup(event, successId) {
+      event.preventDefault ? event.preventDefault() : null;
+      const form = event.target.closest('form') || event.target.closest('section').querySelector('input[type="email"]');
+      const successEl = document.getElementById(successId);
+      if (successEl) {
+        successEl.classList.add('show');
+      }
+      // TODO: Replace with actual form submission (Formspree, backend endpoint, etc.)
+      // Example: fetch('/api/signup', { method: 'POST', body: JSON.stringify({ email }) })
+    }
+  </script>
+
+</body>
+</html>
