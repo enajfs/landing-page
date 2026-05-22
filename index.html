@@ -22,6 +22,7 @@
       --radius:      6px;
       --max-w:       1080px;
       --section-gap: 120px;
+      --hero-bg-opacity: 1;
     }
 
     /* ─── Reset & Base ──────────────────────────────────── */
@@ -115,15 +116,22 @@
       overflow: hidden;
     }
 
-    /* subtle background texture */
+    /* ── Hero background: photo + gradient overlay ── */
     #hero::before {
       content: '';
       position: absolute;
       inset: 0;
       background:
-        radial-gradient(ellipse 60% 50% at 70% 40%, rgba(26,158,122,0.10) 0%, transparent 70%),
-        radial-gradient(ellipse 40% 60% at 10% 80%, rgba(43,42,69,0.6) 0%, transparent 70%);
+        linear-gradient(to bottom,
+          rgba(28,27,46,0.45) 0%,
+          rgba(28,27,46,0.65) 50%,
+          rgba(28,27,46,0.95) 85%,
+          rgba(28,27,46,1)    100%
+        ),
+        url('ChatGPT_Image_May_20__2026__08_39_00_PM.png') center/cover no-repeat;
       pointer-events: none;
+      opacity: var(--hero-bg-opacity, 1);
+      transition: opacity 0.05s linear;
     }
 
     .hero-inner {
@@ -1009,13 +1017,24 @@
           </div>
         </div>
 
-        <div class="about-visual reveal reveal-delay-2" style="padding: 0; overflow: hidden; border-radius: 10px;">
-  <img
-    src="photohere.png"
-    alt="Business professionals ready to start"
-    style="width: 100%; height: 100%; object-fit: cover; display: block; min-height: 320px;"
-  />
-</div>
+        <div class="about-visual reveal reveal-delay-2">
+          <div class="stat-list">
+            <div class="stat-item">
+              <div class="stat-value">06:55</div>
+              <div class="stat-label">Your briefing arrives. Every morning.</div>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+              <div class="stat-value">~12%</div>
+              <div class="stat-label">Of payroll spent on inbox orientation — before any real work starts.</div>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+              <div class="stat-value">0</div>
+              <div class="stat-label">Changes made to your inbox. HeadStart reads. It doesn't touch.</div>
+            </div>
+          </div>
+        </div>
 
       </div>
     </div>
@@ -1035,7 +1054,7 @@
     </div>
   </footer>
 
-  <!-- ── JS: scroll reveal + form ────────────────────────── -->
+  <!-- ── JS: scroll reveal + form + hero bg fade ─────────── -->
   <script>
     // Scroll reveal
     const observer = new IntersectionObserver((entries) => {
@@ -1054,16 +1073,26 @@
       setTimeout(() => el.classList.add('visible'), 100);
     });
 
+    // Hero background photo fade on scroll
+    const hero = document.getElementById('hero');
+    function updateHeroBgOpacity() {
+      const scrolled = window.scrollY;
+      const heroHeight = hero.offsetHeight;
+      const fadeStart = heroHeight * 0.25;
+      const fadeEnd   = heroHeight * 0.80;
+      const progress  = Math.min(Math.max((scrolled - fadeStart) / (fadeEnd - fadeStart), 0), 1);
+      hero.style.setProperty('--hero-bg-opacity', 1 - progress);
+    }
+    window.addEventListener('scroll', updateHeroBgOpacity, { passive: true });
+
     // Form submission handler (placeholder — wire to your backend/Formspree)
     function handleSignup(event, successId) {
       event.preventDefault ? event.preventDefault() : null;
-      const form = event.target.closest('form') || event.target.closest('section').querySelector('input[type="email"]');
       const successEl = document.getElementById(successId);
       if (successEl) {
         successEl.classList.add('show');
       }
       // TODO: Replace with actual form submission (Formspree, backend endpoint, etc.)
-      // Example: fetch('/api/signup', { method: 'POST', body: JSON.stringify({ email }) })
     }
   </script>
 
